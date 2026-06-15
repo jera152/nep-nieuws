@@ -1,14 +1,16 @@
 * {
-  margin: 0;
+  margin: 0 ;
   padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
+  
   background: #f4f4f4;
   color: #1a1a1a;
   line-height: 1.7;
+  font-family: 'DM Sans', sans-serif;
+   
 }
 
 
@@ -64,9 +66,10 @@ main {
   margin: 2rem;
   padding: 0 2rem;
 }
+
 img {
-  
-  display: flex;  
+
+  display: flex;
   max-width: 100%;
   height: auto;
 }
@@ -79,12 +82,11 @@ main h2 {
 
 main p {
   font-size: 15px;
-  color: #444;
   margin-bottom: 1rem;
 }
 
 
-main  button {
+main button {
   background: #185FA5;
   color: #ffffff;
   border: none;
@@ -96,9 +98,10 @@ main  button {
   margin-bottom: 2.5rem;
 }
 
-main  button:hover {
+main button:hover {
   background: #0C447C;
 }
+
 .grid-label {
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -155,3 +158,231 @@ main  button:hover {
   margin: 0;
   line-height: 1.6;
 }
+
+.deepfake-layout {
+  display: flex;
+  gap: 80px;
+  
+}
+
+.deepfake-layout img {
+  width: 25%;
+  border-radius: 8px;
+  display: flex;
+}
+
+.kaarten-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.kaart {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kaart-jaar {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.kaart-titel {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.kaart-tekst {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.kaart-screenshot {
+  background: #f0f0f0;
+  border-radius: 6px;
+  height: 160px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.kaart-screenshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+ h2 {
+    
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+ 
+  .subtitle {
+    font-size: 0.95rem;
+   
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+ 
+  h2 {
+    
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+ 
+  .intro-text {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #333;
+    max-width: 780px;
+    margin-bottom: 28px;
+  }
+ 
+  .sift-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid #ddd;
+  }
+ 
+  .sift-card {
+    padding: 24px 22px 28px;
+    border-right: 1px solid #ddd;
+    position: relative;
+    background: #fff;
+    transition: background 0.2s;
+  }
+ 
+  .sift-card:last-child {
+    border-right: none;
+  }
+ 
+  .sift-card:hover {
+    background: #fafafa;
+  }
+ 
+  .sift-letter {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 14px;
+    display: block;
+  }
+ 
+  .sift-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #111;
+  }
+ 
+  .sift-card p {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+ 
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+ 
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 24px 28px 28px;
+  }
+ 
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+ 
+  
+ 
+  .card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+ 
+  .card li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  
+ 
+    .page-title {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 0.6rem;
+      line-height: 1.15;
+    }
+ 
+    .page-subtitle {
+      font-size: 1rem;
+      color: #555;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+      font-family: Arial, sans-serif;
+    }
+ 
+ 
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 1.25rem;
+    }
+ 
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+ 
+    .text p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+      
+    }
+
+    footer{
+      background: #185FA5;
+      color: #E6F1FB;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5em ;
+      margin-top: 2em;
+      width: 100%;
+    }
+
+  
