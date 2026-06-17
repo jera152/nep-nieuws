@@ -1,29 +1,374 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Quiz – Nepnieuws & AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <link rel="stylesheet" href="main.css">
+    :root {
+      --blue:       #2b5fa3;
+      --blue-dark:  #1e4a8a;
+      --ink:        #1a1a1a;
+      --ink-soft:   #444444;
+      --ink-muted:  #777777;
+      --paper:      #f4f4f4;
+      --paper-card: #ffffff;
+      --border:     #dedede;
+      --border-light: #ececec;
+    }
 
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── BLAUWE HEADER ── */
+    .site-header {
+      background: var(--blue);
+      padding: 2rem 2.5rem 1.75rem;
+    }
+    .site-header h1 {
+      font-size: 1.9rem;
+      font-weight: 400;
+      color: white;
+      margin-bottom: 0.3rem;
+    }
+    .site-header .tagline {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ── WIT PAGE HERO ── */
+    .page-hero {
+      background: var(--paper-card);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 2.5rem 1.75rem;
+    }
+    .page-hero h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+    .page-hero .lead {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--ink-muted);
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      padding: 2.5rem 2.5rem 4rem;
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ── QUIZ START ── */
+    .quiz-start { text-align: center; padding: 3rem 0; }
+    .quiz-start h3 { font-size: 1.4rem; font-weight: 400; margin-bottom: 0.75rem; color: var(--ink); }
+    .quiz-start p  { font-size: 14px; color: var(--ink-muted); font-weight: 300; margin-bottom: 2rem; }
+
+    /* ── QUIZ KAART ── */
+    .quiz-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2rem;
+    }
+
+    .progress-wrap { height: 4px; background: var(--border-light); border-radius: 2px; margin-bottom: 1.5rem; }
+    .progress-fill { height: 4px; background: var(--blue); border-radius: 2px; transition: width 0.4s ease; }
+
+    .quiz-meta {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--ink-muted);
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1rem;
+    }
+
+    .quiz-question {
+      font-size: 17px; font-weight: 500;
+      line-height: 1.45; margin-bottom: 1.5rem; color: var(--ink);
+    }
+
+    .quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .quiz-opt {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 14px; font-weight: 400;
+      color: var(--ink); text-align: left;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+    .quiz-opt:hover:not(:disabled) {
+      background: #e8f0fb;
+      border-color: var(--blue);
+      transform: translateX(3px);
+    }
+    .quiz-opt.correct { background: #e8f5e9; border-color: #4caf50; color: #1b5e20; }
+    .quiz-opt.wrong   { background: #fdecea; border-color: #e53935; color: #7f0000; }
+    .quiz-opt.reveal  { background: #e8f5e9; border-color: #4caf50; color: #1b5e20; }
+    .quiz-opt:disabled { cursor: default; }
+
+    .opt-letter {
+      width: 22px; height: 22px; min-width: 22px;
+      border: 1px solid var(--border); border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: var(--ink-muted);
+      margin-top: 1px; background: white;
+    }
+
+    .quiz-feedback {
+      margin-top: 1rem; padding: 1rem 1.25rem;
+      font-size: 13px; line-height: 1.6;
+      border-left: 3px solid var(--blue);
+      background: #eef3fb;
+      border-radius: 0 4px 4px 0;
+    }
+    .quiz-feedback.correct { border-left-color: #4caf50; background: #f1f8e9; }
+    .quiz-feedback.wrong   { border-left-color: #e53935; background: #fff5f5; }
+    .quiz-feedback strong  { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+    .quiz-feedback a       { color: var(--blue); font-size: 13px; text-decoration: underline; }
+
+    /* ── KNOPPEN ── */
+    .btn-primary {
+      display: inline-block;
+      background: var(--blue); color: white;
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 13px; font-weight: 500;
+      padding: 0.6rem 1.5rem;
+      border: none; border-radius: 4px; cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(43,95,163,0.3);
+    }
+    .btn-primary:active { transform: translateY(0); box-shadow: none; }
+
+    .quiz-next {
+      margin-top: 1rem;
+      background: var(--blue); color: white;
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 13px; font-weight: 500;
+      padding: 0.6rem 1.5rem;
+      border: none; border-radius: 4px; cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .quiz-next:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(43,95,163,0.25);
+    }
+
+    /* ── SCORE ── */
+    .score-display { text-align: center; padding: 3rem 0; }
+    .score-emoji   { font-size: 3rem; margin-bottom: 0.5rem; }
+    .score-num     { font-size: 5rem; font-weight: 300; line-height: 1; color: var(--blue); }
+    .score-sub     { font-size: 2.5rem; color: var(--ink-muted); }
+    .score-label   { font-size: 13px; color: var(--ink-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.5rem; }
+    .score-msg     { font-size: 15px; color: var(--ink-soft); margin: 1rem 0 2rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue);
+      padding: 1.5rem 2.5rem;
+      text-align: center;
+      font-size: 13px; font-weight: 300;
+      color: rgba(255,255,255,0.7);
+    }
+    footer span { color: white; font-size: 14px; font-weight: 500; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .site-header, .page-hero { padding-left: 1rem; padding-right: 1rem; }
+      main { padding: 1.5rem 1rem 3rem; }
+      .quiz-card { padding: 1.25rem; }
+    }
+    nav {
+  background: white;
+  border-bottom: 1px solid #dedede;
+  padding: 0 2.5rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 1.1rem;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #444;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+nav ul li a:hover {
+  color: #2b5fa3;
+}
+
+nav ul li a.active {
+  color: #2b5fa3;
+  border-bottom-color: #2b5fa3;
+  font-weight: 500;
+}
+  </style>
 </head>
-
 <body>
-  <header>
-    <h1>Nepnieuws & AI</h1>
-    <p>School project 2026</p>
-  </header>
+  <!-- BLAUWE HEADER -->
+<div class="site-header">
+  <h1>Nepnieuws & AI</h1>
+  <p class="tagline">School project 2026</p>
+</div>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="wat-is-nep-nieuws.html">Wat is nepnieuws</a></li>
-      <li><a href="ai-en-media.html">AI & Media</a></li>
-      <li><a href="tips.html">Tips</a></li>
-      <li><a href="fact-check.html">Fact-check</a></li>
-      <li><a href="quiz.html">Quiz</a></li>
-    </ul>
-  </nav>
+<!-- ✅ NAVIGATIE HIER INVOEGEN -->
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="wat-is-nep-nieuws.html">Wat is nepnieuws</a></li>
+    <li><a href="ai-en-media.html">AI & Media</a></li>
+    <li><a href="tips.html">Tips</a></li>
+    <li><a href="fact-check.html">Fact-check</a></li>
+    <li><a href="quiz.html">Quiz</a></li>
+  </ul>
+</nav>
 
+<!-- WIT PAGE HERO -->
+<div class="page-hero">
+  <h2>Doe de Quiz!</h2>
+  <p class="lead">Test je kennis over nepnieuws en kunstmatige intelligentie.</p>
+</div>
+
+ 
+  <!-- QUIZ -->
+  <main>
+    <div id="quiz-root"></div>
+  </main>
+
+  <!-- BLAUWE FOOTER -->
+  <footer>
+    <span>Nepnieuws & AI</span> &mdash; School project 2026
+  </footer>
+
+  <script>
+    const questions = [
+      { q: "Wat is een 'deepfake'?", opts: ["Een AI-gegenereerde foto, video of audio die er echt uitziet maar nep is","Een beveiligingsprotocol voor sociale media","Een term voor extreem negatief nieuws","Een type versleuteling voor nieuwsberichten"], correct: 0, explanation: "Deepfakes worden gemaakt met AI en kunnen zeer overtuigend zijn. Ze vormen een groeiend probleem voor desinformatie.", src: { label: "Reuters Institute – Digital News Report", url: "https://reutersinstitute.politics.ox.ac.uk" } },
+      { q: "Welke techniek gebruiken LLMs zoals ChatGPT om tekst te genereren?", opts: ["Ze kopiëren zinnen uit een database","Ze voorspellen woord voor woord welk token het meest waarschijnlijk volgt","Ze vertalen menselijke gedachten via hersenscans","Ze combineren vooraf geschreven sjablonen"], correct: 1, explanation: "Grote taalmodellen zijn getraind om statistisch het meest waarschijnlijke volgende woord te voorspellen. Dit maakt ze vloeiend maar ook foutgevoelig.", src: { label: "Stanford HAI – Understanding LLMs", url: "https://hai.stanford.edu" } },
+      { q: "Wat wordt bedoeld met 'hallucination' bij AI?", opts: ["AI die nepbeelden ziet in foto's","Wanneer AI feitelijk onjuiste informatie met zekerheid presenteert","Een visuele glitch in AI-gegenereerde afbeeldingen","Het vermogen van AI om creatieve verhalen te schrijven"], correct: 1, explanation: "AI-hallucinaties zijn een serieus probleem: modellen verzinnen bronnen of feiten die niet bestaan maar presenteren deze alsof ze waar zijn.", src: { label: "MIT Technology Review – AI Hallucinations", url: "https://www.technologyreview.com" } },
+      { q: "Wat is 'confirmation bias' in de context van nepnieuws?", opts: ["De neiging om nieuws te geloven dat aansluit bij je eigen overtuigingen","Een techniek waarbij journalisten feiten dubbel controleren","Software die nepnieuws automatisch detecteert","Een algoritme dat nieuws personaliseert"], correct: 0, explanation: "Confirmation bias maakt ons vatbaarder voor nepnieuws dat past bij wat we al geloven. Bewustzijn hiervan is de eerste stap.", src: { label: "First Draft – Psychology of Misinformation", url: "https://firstdraftnews.org" } },
+      { q: "Welke organisatie fact-checkt nieuws in Nederland?", opts: ["NOS Faktencheck","RTL Nieuws Verificatie","Nu.nl Check","AFP Fact Check Nederland"], correct: 3, explanation: "AFP Fact Check is actief in Nederland. Ook nieuwscheckers.nl bundelt fact-checks van Nederlandse redacties.", src: { label: "Nieuwscheckers.nl", url: "https://nieuwscheckers.nl" } },
+      { q: "Wat is een 'filter bubble'?", opts: ["Een tool waarmee je ongewenste emails filtert","Een situatie waarbij algoritmen je alleen content tonen die aansluit bij je interesses","Een privacyinstelling op sociale media","Een manier waarop journalisten hun bronnen beschermen"], correct: 1, explanation: "Algoritmen van platforms optimaliseren voor klikken, waardoor je steeds minder diverse informatie te zien krijgt.", src: { label: "Britannica – Filter Bubble", url: "https://www.britannica.com/topic/filter-bubble" } }
+    ];
+
+    let qIdx = 0, score = 0, answered = false;
+
+    function renderQuizStart() {
+      document.getElementById('quiz-root').innerHTML = `
+        <div class="quiz-start">
+          <h3>Klaar om te beginnen?</h3>
+          <p>${questions.length} vragen over nepnieuws en AI — elke vraag heeft één goed antwoord.</p>
+          <button class="btn-primary" onclick="startQuiz()">Begin de quiz</button>
+        </div>`;
+    }
+
+    function startQuiz() { qIdx = 0; score = 0; answered = false; renderQuestion(); }
+
+    function renderQuestion() {
+      const q = questions[qIdx];
+      const prog = (qIdx / questions.length) * 100;
+      const letters = ['A','B','C','D'];
+      document.getElementById('quiz-root').innerHTML = `
+        <div class="quiz-card">
+          <div class="progress-wrap"><div class="progress-fill" style="width:${prog}%"></div></div>
+          <div class="quiz-meta">
+            <span>Vraag ${qIdx+1} van ${questions.length}</span>
+            <span>${score} goed</span>
+          </div>
+          <div class="quiz-question">${q.q}</div>
+          <div class="quiz-opts">
+            ${q.opts.map((o,i) => `
+              <button class="quiz-opt" onclick="choose(${i})">
+                <span class="opt-letter">${letters[i]}</span>${o}
+              </button>`).join('')}
+          </div>
+          <div id="qfeedback"></div>
+          <div id="qnext"></div>
+        </div>`;
+    }
+
+    function choose(idx) {
+      if (answered) return;
+      answered = true;
+      const q = questions[qIdx];
+      const correct = idx === q.correct;
+      if (correct) score++;
+      document.querySelectorAll('.quiz-opt').forEach((b,i) => {
+        b.disabled = true;
+        if (i === q.correct) b.classList.add(correct && i === idx ? 'correct' : 'reveal');
+        if (i === idx && !correct) b.classList.add('wrong');
+      });
+      document.getElementById('qfeedback').innerHTML = `
+        <div class="quiz-feedback ${correct ? 'correct' : 'wrong'}">
+          <strong>${correct ? '✓ Correct!' : '✗ Niet juist.'}</strong>
+          ${q.explanation} &nbsp;<a href="${q.src.url}" target="_blank">→ ${q.src.label}</a>
+        </div>`;
+      document.getElementById('qnext').innerHTML = `
+        <button class="quiz-next" onclick="nextQ()">
+          ${qIdx+1 < questions.length ? 'Volgende vraag →' : 'Resultaten bekijken →'}
+        </button>`;
+    }
+
+    function nextQ() {
+      qIdx++; answered = false;
+      if (qIdx >= questions.length) renderScore();
+      else renderQuestion();
+    }
+
+    function renderScore() {
+      const pct = Math.round((score / questions.length) * 100);
+      const emoji = pct >= 80 ? '🎓' : pct >= 50 ? '👍' : '📚';
+      const msg = pct >= 80 ? 'Uitstekend! Je weet veel over AI en nepnieuws.' : pct >= 50 ? 'Goed bezig! Er valt nog wat te leren.' : 'Blijf kritisch — lees meer over mediawijsheid.';
+      document.getElementById('quiz-root').innerHTML = `
+        <div class="score-display">
+          <div class="score-emoji">${emoji}</div>
+          <div class="score-num">${score}<span class="score-sub">/${questions.length}</span></div>
+          <div class="score-label">${pct}% correct</div>
+          <p class="score-msg">${msg}</p>
+          <button class="btn-primary" onclick="startQuiz()">Opnieuw spelen</button>
+        </div>`;
+    }
+
+    renderQuizStart();
+  </script>
+
+</body>
+</html>
